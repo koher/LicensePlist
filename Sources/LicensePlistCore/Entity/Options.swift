@@ -1,17 +1,17 @@
 import Foundation
 
 public struct Options {
-    public let outputPath: URL
-    public let cartfilePath: URL
-    public let mintfilePath: URL
-    public let podsPath: URL
-    public let packagePath: URL
-    public let xcodeprojPath: URL
-    public let prefix: String
-    public let gitHubToken: String?
-    public let htmlPath: URL?
-    public let markdownPath: URL?
-    public let config: Config
+    public var outputPath: URL
+    public var cartfilePath: URL
+    public var mintfilePath: URL
+    public var podsPath: URL
+    public var packagePath: URL
+    public var xcodeprojPath: URL
+    public var prefix: String
+    public var gitHubToken: String?
+    public var htmlPath: URL?
+    public var markdownPath: URL?
+    public var config: Config
 
     public static let empty = Options(outputPath: URL(fileURLWithPath: ""),
                                       cartfilePath: URL(fileURLWithPath: ""),
