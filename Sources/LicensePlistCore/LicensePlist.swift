@@ -27,7 +27,7 @@ public final class LicensePlist {
     }
 }
 
-private func readCartfile(path: URL) -> GitHubLibraryConfigFile {
+public func readCartfile(path: URL) -> GitHubLibraryConfigFile {
     if path.lastPathComponent != Consts.cartfileName {
         fatalError("Invalid Cartfile name: \(path.lastPathComponent)")
     }
@@ -37,14 +37,14 @@ private func readCartfile(path: URL) -> GitHubLibraryConfigFile {
     return .carthage(content: path.lp.read())
 }
 
-private func readMintfile(path: URL) -> GitHubLibraryConfigFile {
+public func readMintfile(path: URL) -> GitHubLibraryConfigFile {
     if path.lastPathComponent != Consts.mintfileName {
         fatalError("Invalid MintFile name: \(path.lastPathComponent)")
     }
     return .mint(content: path.lp.read())
 }
 
-private func readSwiftPackages(path: URL) -> String? {
+public func readSwiftPackages(path: URL) -> String? {
     if path.lastPathComponent != Consts.packageName && path.lastPathComponent != "Package.resolved" {
         fatalError("Invalid Package.swift name: \(path.lastPathComponent)")
     }
@@ -54,7 +54,7 @@ private func readSwiftPackages(path: URL) -> String? {
     return path.lp.read()
 }
 
-private func readXcodeProject(path: URL) -> String? {
+public func readXcodeProject(path: URL) -> String? {
 
     var projectPath: URL?
     if path.lastPathComponent.contains("*") {
@@ -87,7 +87,7 @@ private func readXcodeProject(path: URL) -> String? {
     }
 }
 
-private func readPodsAcknowledgements(path: URL) -> [String] {
+public func readPodsAcknowledgements(path: URL) -> [String] {
     if path.lastPathComponent != Consts.podsDirectoryName {
         fatalError("Invalid Pods name: \(path.lastPathComponent)")
     }
