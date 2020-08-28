@@ -1,21 +1,21 @@
 import Foundation
 import LoggerAPI
 
-struct PlistInfo {
-    let options: Options
-    var cocoaPodsLicenses: [CocoaPodsLicense]?
-    var manualLicenses: [ManualLicense]?
-    var githubLibraries: [GitHub]?
-    var githubLicenses: [GitHubLicense]?
-    var summary: String?
-    var summaryPath: URL?
-    var licenses: [LicenseInfo]?
+public struct PlistInfo {
+    public let options: Options
+    public var cocoaPodsLicenses: [CocoaPodsLicense]?
+    public var manualLicenses: [ManualLicense]?
+    public var githubLibraries: [GitHub]?
+    public var githubLicenses: [GitHubLicense]?
+    public var summary: String?
+    public var summaryPath: URL?
+    public var licenses: [LicenseInfo]?
 
-    init(options: Options) {
+    public init(options: Options) {
         self.options = options
     }
 
-    mutating func loadCocoaPodsLicense(acknowledgements: [String]) {
+    public mutating func loadCocoaPodsLicense(acknowledgements: [String]) {
         guard cocoaPodsLicenses == nil else { preconditionFailure() }
         Log.info("Pods License parse start")
 
@@ -28,7 +28,7 @@ struct PlistInfo {
         cocoaPodsLicenses = config.filterExcluded(licenses).sorted()
     }
 
-    mutating func loadGitHubLibraries(file: GitHubLibraryConfigFile) {
+    public mutating func loadGitHubLibraries(file: GitHubLibraryConfigFile) {
         switch file.type {
         case .carthage:
             Log.info("Carthage License collect start")
@@ -42,7 +42,7 @@ struct PlistInfo {
         githubLibraries = ((githubLibraries ?? []) + options.config.apply(githubs: githubs)).sorted()
     }
 
-    mutating func loadSwiftPackageLibraries(packageFile: String?) {
+    public mutating func loadSwiftPackageLibraries(packageFile: String?) {
         Log.info("Swift Package Manager License collect start")
 
         let packages = SwiftPackage.loadPackages(packageFile ?? "")
@@ -51,12 +51,12 @@ struct PlistInfo {
         githubLibraries = (githubLibraries ?? []) + options.config.apply(githubs: packagesAsGithubLibraries)
     }
 
-    mutating func loadManualLibraries() {
+    public mutating func loadManualLibraries() {
         Log.info("Manual License start")
         manualLicenses = ManualLicense.load(options.config.manuals).sorted()
     }
 
-    mutating func compareWithLatestSummary() {
+    public mutating func compareWithLatestSummary() {
         guard let cocoaPodsLicenses = cocoaPodsLicenses,
             let githubLibraries = githubLibraries,
             let manualLicenses = manualLicenses else { preconditionFailure() }
@@ -77,7 +77,7 @@ struct PlistInfo {
         summaryPath = savePath
     }
 
-    mutating func downloadGitHubLicenses() {
+    public mutating func downloadGitHubLicenses() {
         guard let githubLibraries = githubLibraries else { preconditionFailure() }
 
         let queue = OperationQueue()
@@ -87,7 +87,7 @@ struct PlistInfo {
         githubLicenses = carthageOperations.map { $0.result?.value }.compactMap { $0 }
     }
 
-    mutating func collectLicenseInfos() {
+    public mutating func collectLicenseInfos() {
         guard let cocoaPodsLicenses = cocoaPodsLicenses,
             let githubLicenses = githubLicenses,
             let manualLicenses = manualLicenses else { preconditionFailure() }
@@ -101,7 +101,7 @@ struct PlistInfo {
             .sorted { $0.name.lowercased() < $1.name.lowercased() }
     }
 
-    func outputPlist() {
+    public func outputPlist() {
         guard let licenses = licenses else { preconditionFailure() }
         let outputPath = options.outputPath
         let itemsPath = outputPath.appendingPathComponent(options.prefix)
@@ -127,7 +127,7 @@ struct PlistInfo {
         }
     }
 
-    func reportMissings() {
+    public func reportMissings() {
         guard let githubLibraries = githubLibraries, let licenses = licenses else { preconditionFailure() }
 
         Log.info("----------Result-----------")
@@ -144,7 +144,7 @@ struct PlistInfo {
         }
     }
 
-    func finish() {
+    public func finish() {
         precondition(cocoaPodsLicenses != nil && githubLibraries != nil && githubLicenses != nil && licenses != nil)
         guard let summary = summary, let summaryPath = summaryPath else {
             fatalError("summary should be set")
